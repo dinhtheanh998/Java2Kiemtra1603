@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -51,10 +52,7 @@ public class Main {
                     break;
                 }
             case 3:
-                System.out.println("Nhập mã sinh viên cần xoá: ");
-                Scanner sc = new Scanner(System.in);
-                String id = sc.nextLine();
-                if (deleteStudentByID(id, studentsDAO)) {
+                if (deleteStudentByID(studentsDAO)) {
                     System.out.println("Xoá sinh viên thành công");
                 } else {
                     System.out.println("Xoá sinh viên thất bại");
@@ -152,10 +150,10 @@ public class Main {
         return studentsDAO.addStudent(students);
     }
 
-    public static boolean deleteStudentByID(String id, StudentsDAO studentsDAO) {
+    public static boolean deleteStudentByID(StudentsDAO studentsDAO) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập mã sinh viên cần xoá: ");
-        id = sc.nextLine();
+        String id = sc.nextLine();
         return studentsDAO.deleteStudentByID(id);
     }
 
@@ -202,6 +200,10 @@ public class Main {
     }
 
     public static List<Students> filterStudentIsFemaleAndGPAAndAddress(StudentsDAO studentsDAO) {
+        List<Students> students = studentsDAO.getAllStudents();
+        if (students == null) {
+            return null;
+        }
         return studentsDAO.getAllSttudentWithAddressInHanoiAndGPA();
     }
 
@@ -210,13 +212,9 @@ public class Main {
         if (students == null) {
             return null;
         }
-        Collections.sort(students, new Comparator<Students>() {
-            @Override
-            public int compare(Students o1, Students o2) {
-                return o1.getFull_name().compareTo(o2.getFull_name());
-            }
-        });
-        return students;
+        return students.stream().sorted((o1, o2) -> o1.getFull_name().compareTo(o2.getFull_name())).collect(Collectors.toList());
+//        Collections.sort(students, (o1, o2) -> o1.getFull_name().compareTo(o2.getFull_name()));
+//        return students;
     }
 
     public static Students getStudentByID(String id, StudentsDAO studentsDAO) {
