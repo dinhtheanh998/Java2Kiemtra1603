@@ -213,8 +213,6 @@ public class Main {
             return null;
         }
         return students.stream().sorted((o1, o2) -> o1.getFull_name().compareTo(o2.getFull_name())).collect(Collectors.toList());
-//        Collections.sort(students, (o1, o2) -> o1.getFull_name().compareTo(o2.getFull_name()));
-//        return students;
     }
 
     public static Students getStudentByID(String id, StudentsDAO studentsDAO) {
